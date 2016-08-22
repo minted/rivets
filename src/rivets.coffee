@@ -341,6 +341,9 @@ class Rivets.View
 
     parse el for el in @els
 
+    @bindings.sort (a, b) ->
+      (b.binder?.priority or 0) - (a.binder?.priority or 0)
+
     return
 
   # Returns an array of bindings where the supplied function evaluates to true.
@@ -472,6 +475,7 @@ Rivets.binders =
 
   checked:
     publishes: true
+    priority: 2000
     bind: (el) ->
       Rivets.Util.bindEvent el, 'change', @publish
     unbind: (el) ->
@@ -484,6 +488,7 @@ Rivets.binders =
 
   unchecked:
     publishes: true
+    priority: 2000
     bind: (el) ->
       Rivets.Util.bindEvent el, 'change', @publish
     unbind: (el) ->
@@ -505,6 +510,7 @@ Rivets.binders =
 
   value:
     publishes: true
+    priority: 3000
     bind: (el) ->
       Rivets.Util.bindEvent el, 'change', @publish
     unbind: (el) ->
@@ -529,6 +535,7 @@ Rivets.binders =
 
   if:
     block: true
+    priority: 4000
 
     bind: (el) ->
       unless @marker?
@@ -567,6 +574,7 @@ Rivets.binders =
 
   unless:
     block: true
+    priority: 4000
 
     bind: (el) ->
       Rivets.binders.if.bind.call @, el
@@ -582,6 +590,7 @@ Rivets.binders =
 
   "on-*":
     function: true
+    priority: 1000
 
     unbind: (el) ->
       Rivets.Util.unbindEvent el, @args[0], @handler if @handler
@@ -592,6 +601,7 @@ Rivets.binders =
 
   "each-*":
     block: true
+    priority: 4000
 
     bind: (el) ->
       unless @marker?

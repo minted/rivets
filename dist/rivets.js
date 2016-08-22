@@ -488,6 +488,10 @@
         el = _ref[_i];
         parse(el);
       }
+      this.bindings.sort(function(a, b) {
+        var _ref1, _ref2;
+        return (((_ref1 = b.binder) != null ? _ref1.priority : void 0) || 0) - (((_ref2 = a.binder) != null ? _ref2.priority : void 0) || 0);
+      });
     };
 
     View.prototype.select = function(fn) {
@@ -701,6 +705,7 @@
     },
     checked: {
       publishes: true,
+      priority: 2000,
       bind: function(el) {
         return Rivets.Util.bindEvent(el, 'change', this.publish);
       },
@@ -718,6 +723,7 @@
     },
     unchecked: {
       publishes: true,
+      priority: 2000,
       bind: function(el) {
         return Rivets.Util.bindEvent(el, 'change', this.publish);
       },
@@ -744,6 +750,7 @@
     },
     value: {
       publishes: true,
+      priority: 3000,
       bind: function(el) {
         return Rivets.Util.bindEvent(el, 'change', this.publish);
       },
@@ -782,6 +789,7 @@
     },
     "if": {
       block: true,
+      priority: 4000,
       bind: function(el) {
         var attr, declaration;
         if (this.marker == null) {
@@ -828,6 +836,7 @@
     },
     unless: {
       block: true,
+      priority: 4000,
       bind: function(el) {
         return Rivets.binders["if"].bind.call(this, el);
       },
@@ -843,6 +852,7 @@
     },
     "on-*": {
       "function": true,
+      priority: 1000,
       unbind: function(el) {
         if (this.handler) {
           return Rivets.Util.unbindEvent(el, this.args[0], this.handler);
@@ -857,6 +867,7 @@
     },
     "each-*": {
       block: true,
+      priority: 4000,
       bind: function(el) {
         var attr;
         if (this.marker == null) {
